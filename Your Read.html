@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#FAF8F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F0D09" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Weekly Reading">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23B8860B'/%3E%3Ctext x='90' y='128' font-family='Georgia,serif' font-size='110' font-weight='600' fill='%23FAF8F3' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<title>Weekly Reading</title>
+<style>
+
+:root {
+  --fs-user: 1;
+
+  --bg: #FAF8F3;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #F2EEE5;
+  --text: #0F0E0C;
+  --text-muted: #6B655C;
+  --text-faint: #9A938A;
+  --border: #E4DFD3;
+  --border-strong: #CFC8B8;
+  --accent: #B8860B;
+  --accent-soft: #FFE9A8;
+  --accent-line: rgba(184,134,11,.42);
+  --accent-ink: #5C4405;
+  --overlay: rgba(20,17,12,.38);
+  --focus: #2A6FDB;
+  --danger: #A23B2E;
+
+  --font-serif: "Literata", "Iowan Old Style", "Charter", "Source Serif 4", Georgia, ui-serif, serif;
+  --font-ui: "Public Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --fs-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  --fs-sm: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+  --fs-base: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --fs-lg: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --fs-xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --fs-read: calc(var(--fs-base) * var(--fs-user, 1));
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+  --sp-9: clamp(64px, 8vw, 96px);
+
+  --r-xs: 4px; --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-full: 999px;
+
+  --sh-1: 0 1px 2px rgba(26,24,21,.04), 0 1px 1px rgba(26,24,21,.03);
+  --sh-2: 0 6px 20px rgba(26,24,21,.08), 0 2px 6px rgba(26,24,21,.05);
+  --sh-3: 0 20px 60px rgba(26,24,21,.18), 0 8px 24px rgba(26,24,21,.10);
+  --sh-pop: 0 10px 32px rgba(26,24,21,.14), 0 2px 8px rgba(26,24,21,.06);
+
+  --dur-fast: 130ms; --dur-base: 200ms; --dur-slow: 320ms;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-spring: cubic-bezier(.34, 1.3, .64, 1);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F0D09; --bg-raised: #1C1915; --bg-sunken: #0A0806;
+    --text: #EAE3D6; --text-muted: #A79F90; --text-faint: #6E675B;
+    --border: #28231D; --border-strong: #3D3830;
+    --accent: #D4A74A; --accent-soft: rgba(212,167,74,.22);
+    --accent-line: rgba(212,167,74,.45); --accent-ink: #0F0D09;
+    --overlay: rgba(0,0,0,.6); --focus: #7FB4FF;
+    --sh-3: 0 20px 60px rgba(0,0,0,.6), 0 8px 24px rgba(0,0,0,.45);
+    --sh-pop: 0 12px 36px rgba(0,0,0,.55), 0 3px 10px rgba(0,0,0,.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scrollbar-gutter: stable; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  -webkit-text-size-adjust: 100%;
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+[hidden] { display: none !important; }
+
+.rw { min-height: 100vh; min-height: 100dvh; }
+
+.rw-page {
+  padding: var(--sp-9) clamp(16px, 5vw, 32px) calc(var(--sp-8) + 72px);
+}
+
+.rw-inner {
+  max-width: 38em;
+  margin: 0 auto;
+  font-family: var(--font-serif);
+  font-size: var(--fs-read);
+  line-height: 1.72;
+  letter-spacing: -0.004em;
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
+  transition: font-size var(--dur-fast) var(--ease-out);
+}
+
+.rw-header {
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--sp-7);
+}
+
+.rw-title {
+  margin: 0 0 var(--sp-3);
+  font-size: 1.45em;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+.rw-subtitle {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+.rw-body p {
+  margin: 0 0 1em;
+  text-wrap: pretty;
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.rw-body p:last-child { margin-bottom: 0; }
+
+body.rw-focus .rw-body p { opacity: .28; }
+body.rw-focus .rw-body p.rw-ctx { opacity: 1; }
+body.rw-focus .rw-header { opacity: .5; }
+body.rw-focus .rw-endnotes { opacity: .5; }
+
+.rw-note {
+  position: relative;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 2px;
+  border-bottom: 2px solid var(--accent);
+  background-image: linear-gradient(var(--accent-soft), var(--accent-soft));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  transition: filter var(--dur-base) var(--ease-out);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .rw-note {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+.rw-note:hover,
+.rw-note:active,
+.rw-note:focus-visible { filter: brightness(0.95); }
+
+.rw-note.is-active {
+  filter: brightness(0.9);
+}
+
+.rw-note:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.rw-note::before {
+  content: "";
+  position: absolute;
+  inset: -8px -3px;
+}
+
+.rw-popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: min(24em, calc(100vw - 32px));
+  max-height: min(60vh, 28em);
+  overflow: auto;
+  padding: var(--sp-5);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-pop);
+  opacity: 0;
+  transform: translateY(-4px) scale(.97);
+  transform-origin: 50% 0%;
+  transition: opacity var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-spring);
+  z-index: 60;
+  font-family: var(--font-serif);
+  font-size: var(--fs-read);
+  line-height: 1.55;
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
+  overscroll-behavior: contain;
+}
+.rw-popup.is-open { opacity: 1; transform: translateY(0) scale(1); }
+.rw-popup[data-side="above"] { transform-origin: 50% 100%; }
+
+.rw-popup-close {
+  position: absolute;
+  top: var(--sp-2); right: var(--sp-2);
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border: 0; border-radius: var(--r-full);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 18px; line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.rw-popup-close:hover { background: var(--bg-sunken); color: var(--text); }
+.rw-popup-close:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.rw-popup-word {
+  display: inline-block;
+  max-width: calc(100% - 32px);
+  margin: 0 0 var(--sp-3);
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-xs);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-size: 1.08em;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.012em;
+  overflow-wrap: break-word;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rw-popup-word { background: var(--accent); color: var(--accent-ink); }
+}
+
+.rw-popup-note {
+  margin: 0;
+  font-size: .86em;
+  line-height: 1.58;
+  color: var(--text);
+  overflow-wrap: break-word;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+.rw-endnotes {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-5);
+  border-top: 1px solid var(--border);
+  font-family: var(--font-ui);
+  font-size: 0.78em;
+  line-height: 1.55;
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.rw-endnotes summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.95em;
+  padding: var(--sp-2) 0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.rw-endnotes summary::-webkit-details-marker { display: none; }
+.rw-endnotes summary::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--dur-base) var(--ease-out);
+  margin-right: 2px;
+}
+.rw-endnotes[open] summary::before { transform: rotate(45deg); }
+.rw-endnotes summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+.rw-endnotes-count {
+  font-weight: 400;
+  color: var(--text-faint);
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.rw-endnotes-list {
+  list-style: none;
+  margin: var(--sp-3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.rw-endnotes-item { display: flex; flex-direction: column; gap: 2px; }
+
+.rw-endnotes-word {
+  font-family: var(--font-serif);
+  font-size: 1.05em;
+  font-weight: 600;
+  color: var(--text);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  align-self: flex-start;
+  border-bottom: 1px solid var(--accent-line);
+  hyphens: none;
+  -webkit-hyphens: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.rw-endnotes-word:hover { border-bottom-color: var(--accent); }
+.rw-endnotes-word:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+
+.rw-endnotes-note {
+  color: var(--text-muted);
+  font-size: 0.95em;
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.rw-controls {
+  position: fixed;
+  right: var(--sp-4);
+  bottom: calc(var(--sp-4) + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  padding: var(--sp-1);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  box-shadow: var(--sh-2);
+  z-index: 40;
+  transition: box-shadow var(--dur-base) var(--ease-out);
+}
+.rw-controls:hover,
+.rw-controls.is-open { box-shadow: var(--sh-pop); }
+
+.rw-controls-trigger,
+.rw-controls-body button {
+  height: 40px;
+  border: 0;
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.rw-controls-trigger:hover,
+.rw-controls-body button:hover { background: var(--bg-sunken); }
+.rw-controls-trigger:active,
+.rw-controls-body button:active { transform: scale(.94); }
+.rw-controls-trigger:focus-visible,
+.rw-controls-body button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.rw-controls-body button:disabled { opacity: .3; cursor: default; transform: none; }
+
+.rw-controls-trigger {
+  width: 40px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: -0.02em;
+}
+.rw-controls-trigger[aria-expanded="true"] { color: var(--text); }
+
+.rw-controls-body { display: none; gap: 2px; padding-left: 2px; }
+.rw-controls:hover .rw-controls-body,
+.rw-controls:focus-within .rw-controls-body,
+.rw-controls.is-open .rw-controls-body { display: flex; }
+.rw-controls-body button { width: 40px; font-size: var(--fs-sm); }
+
+@media print {
+  .rw-controls, .rw-popup { display: none !important; }
+  .rw-page { padding: 0; }
+  .rw-note { background: none; border-bottom: 0; }
+}
+
+
+</style>
+</head>
+<body>
+<div class="rw">
+  <main class="rw-page">
+    <div class="rw-inner">
+      <article class="rw-article">
+
+        <div class="rw-body" id="rw-body">
+<p>However, the <span class="rw-note" role="button" tabindex="0" onclick="" data-word="reverse" data-note="reverse — to change to the opposite direction or order (معکوس کردن، برعکس کردن)" data-note-index="0">reverse</span> is not true. Many people have a strong Abandonment lifetrap and do not have an issue with dependence. They belong to the second type, whose lifetrap <span class="rw-note" role="button" tabindex="0" onclick="" data-word="arose" data-note="arise — past tense; happened or appeared (به‌وجود آمد، پیش آمد)" data-note-index="1">arose</span> from the <span class="rw-note" role="button" tabindex="0" onclick="" data-word="instability" data-note="Lack of steadiness or stability (بی‌ثباتی، ناپایداری)" data-note-index="2">instability</span> of the child’s emotional connections to the people who are most intimate—the mother, the father, sisters and brothers, and close friends. Both Patrick and Lindsay are afraid of being abandoned by the people they love, but they can <span class="rw-note" role="button" tabindex="0" onclick="" data-word="function" data-note="to work or operate; to do its job (عمل کردن، کار کردن)" data-note-index="3">function</span> independently. They have a dependence of sorts on their partners, but it is an emotional, rather than a functional, dependence.</p><p>If your lifetrap <span class="rw-note" role="button" tabindex="0" onclick="" data-word="arose" data-note="arise — past tense; happened or appeared (به‌وجود آمد، پیش آمد)" data-note-index="1">arose</span> from <span class="rw-note" role="button" tabindex="0" onclick="" data-word="instability" data-note="Lack of steadiness or stability (بی‌ثباتی، ناپایداری)" data-note-index="2">instability</span>, then what happened was you experienced an emotional connection, and then it was lost. You cannot <span class="rw-note" role="button" tabindex="0" onclick="" data-word="bear" data-note="to tolerate something difficult or painful (تحمل کردن، تاب آوردن)" data-note-index="4">bear</span> to be apart from the people you love because of the way you feel without them. It is a matter of feeling connected to the rest of <span class="rw-note" role="button" tabindex="0" onclick="" data-word="humanity" data-note="all human beings (بشریت، انسانیت)" data-note-index="5">humanity</span>. When the connection is lost, you are <span class="rw-note" role="button" tabindex="0" onclick="" data-word="thrown" data-note="past form of “throw”; moved something through the air with your hand (پرتاب کرد، انداخت)" data-note-index="6">thrown</span> into nothingness.</p><p>LINDSAY: After Greg left me, I was totally alone. I could feel it around me, like an <span class="rw-note" role="button" tabindex="0" onclick="" data-word="ache" data-note="a continuous dull pain (درد، کوفتگی)" data-note-index="7">ache</span>. There was just nothing at all.</p><p>You need other people to feel <span class="rw-note" role="button" tabindex="0" onclick="" data-word="soothed" data-note="soothe — past tense/past participle; made someone feel calmer or less upset (آرام کرد، تسکین داد)" data-note-index="8">soothed</span>. This <span class="rw-note" role="button" tabindex="0" onclick="" data-word="differs" data-note="differ — third-person singular present; be different (متفاوت بودن، فرق داشتن)" data-note-index="9">differs</span> from abandonment based upon dependence, in which you need someone to take care of you as a child needs a parent. In one case, you are looking for guidance, direction, and help; and in the other case, you are looking for <span class="rw-note" role="button" tabindex="0" onclick="" data-word="nurturance" data-note="care and support that helps someone grow (مراقبت، پرورش)" data-note-index="10">nurturance</span>, love, and a sense of emotional connection.</p><p>There is another difference: Dependent people often have a number of people <span class="rw-note" role="button" tabindex="0" onclick="" data-word="lined up" data-note="arranged in a line or row (ردیف شده، صف کشیده)" data-note-index="11">lined up</span> as <span class="rw-note" role="button" tabindex="0" onclick="" data-word="backups" data-note="other people kept as possible future romantic partners (گزینه‌های جایگزین، رابطه‌های پشتیبان)" data-note-index="12">backups</span> in case their main person leaves. They have someone immediately available to take the person’s place, or they find someone new, and quickly form another dependent relationship. Few lonely people have dependence underneath. Dependent people do not <span class="rw-note" role="button" tabindex="0" onclick="" data-word="tolerate" data-note="to accept something unpleasant without complaining (تحمل کردن، تاب آوردن)" data-note-index="13">tolerate</span> the loneliness. Most dependent people are quite talented at finding someone to take care of them. They go from one person to another, with <span class="rw-note" role="button" tabindex="0" onclick="" data-word="rarely" data-note="not often (به‌ندرت، خیلی کم)" data-note-index="14">rarely</span> more than a month between.</p><p>This is not necessarily true of people who <span class="rw-note" role="button" tabindex="0" onclick="" data-word="fear" data-note="a feeling of being afraid (ترس، هراس)" data-note-index="15">fear</span> emotional abandonment. They can be alone for long periods of time. They might <span class="rw-note" role="button" tabindex="0" onclick="" data-word="withdraw" data-note="to move away or stop participating (کناره‌گیری کردن، عقب‌نشینی کردن)" data-note-index="16">withdraw</span> from close relationships out of hurt and out of <span class="rw-note" role="button" tabindex="0" onclick="" data-word="fear" data-note="a feeling of being afraid (ترس، هراس)" data-note-index="15">fear</span> of being hurt again. They have already faced the loneliness as children, and they know they can <span class="rw-note" role="button" tabindex="0" onclick="" data-word="survive" data-note="to continue to live or exist (زنده ماندن، دوام آوردن)" data-note-index="17">survive</span>. That is not the issue. It is the process of loss that is <span class="rw-note" role="button" tabindex="0" onclick="" data-word="devastating" data-note="causing great damage or sadness (ویرانگر، بسیار ناراحت‌کننده)" data-note-index="18">devastating</span>.</p><p>It is having that connection, and then losing it, and being <span class="rw-note" role="button" tabindex="0" onclick="" data-word="thrown" data-note="past form of “throw”; moved something through the air with your hand (پرتاب کرد، انداخت)" data-note-index="6">thrown</span> back into the loneliness one more time.</p><p>THE ORIGINS OF THE ABANDONMENT LIFETRAP</p><p>When we talk about the origins of lifetraps, we focus <span class="rw-note" role="button" tabindex="0" onclick="" data-word="primarily" data-note="mainly; mostly (عمدتاً، در درجه اول)" data-note-index="19">primarily</span> on <span class="rw-note" role="button" tabindex="0" onclick="" data-word="features" data-note="important parts or qualities of something (ویژگی‌ها، خصوصیات)" data-note-index="20">features</span> of the child’s <span class="rw-note" role="button" tabindex="0" onclick="" data-word="environment" data-note="the conditions and surroundings where someone or something lives or exists (محیط، شرایط محیطی)" data-note-index="21">environment</span>. We know quite a bit about the dysfunctional family environments—such as abuse, <span class="rw-note" role="button" tabindex="0" onclick="" data-word="neglect" data-note="failure to give enough care or attention (غفلت، بی‌توجهی)" data-note-index="22">neglect</span>, and <span class="rw-note" role="button" tabindex="0" onclick="" data-word="alcoholism" data-note="a strong dependence on alcohol (اعتیاد به الکل، الکلیسم)" data-note-index="23">alcoholism</span>—that seem to <span class="rw-note" role="button" tabindex="0" onclick="" data-word="promote" data-note="to help something develop or become more successful (ترویج کردن، ارتقا دادن)" data-note-index="24">promote</span> individual lifetraps. We <span class="rw-note" role="button" tabindex="0" onclick="" data-word="downplay" data-note="to make something seem less important or serious (کم‌اهمیت جلوه دادن، کوچک شمردن)" data-note-index="25">downplay</span> the <span class="rw-note" role="button" tabindex="0" onclick="" data-word="contribution" data-note="something you give to help achieve a result (مشارکت، سهم)" data-note-index="26">contribution</span> of <span class="rw-note" role="button" tabindex="0" onclick="" data-word="heredity" data-note="the passing of traits from parents to children (وراثت، ارث‌بری)" data-note-index="27">heredity</span>, in part because researchers know so little about the role of biology in determining our long-term personality patterns. We assume that <span class="rw-note" role="button" tabindex="0" onclick="" data-word="heredity" data-note="the passing of traits from parents to children (وراثت، ارث‌بری)" data-note-index="27">heredity</span> must make its mark in terms of our <span class="rw-note" role="button" tabindex="0" onclick="" data-word="temperament" data-note="a person&#39;s natural way of reacting and behaving (خلق‌وخو، مزاج)" data-note-index="28">temperament</span>, which in turn <span class="rw-note" role="button" tabindex="0" onclick="" data-word="influences" data-note="affects how someone or something develops or behaves (تأثیر می‌گذارد، تحت تأثیر قرار می‌دهد)" data-note-index="29">influences</span> how we are treated as children and how we respond to that <span class="rw-note" role="button" tabindex="0" onclick="" data-word="treatment" data-note="the way someone is dealt with or cared for (رفتار، درمان)" data-note-index="30">treatment</span>. But we <span class="rw-note" role="button" tabindex="0" onclick="" data-word="rarely" data-note="not often (به‌ندرت، خیلی کم)" data-note-index="14">rarely</span> have any way of guessing how a child’s <span class="rw-note" role="button" tabindex="0" onclick="" data-word="temperament" data-note="a person&#39;s natural way of reacting and behaving (خلق‌وخو، مزاج)" data-note-index="28">temperament</span> <span class="rw-note" role="button" tabindex="0" onclick="" data-word="influences" data-note="affects how someone or something develops or behaves (تأثیر می‌گذارد، تحت تأثیر قرار می‌دهد)" data-note-index="29">influences</span> the development of <span class="rw-note" role="button" tabindex="0" onclick="" data-word="specific" data-note="clearly defined or particular (مشخص، معین)" data-note-index="31">specific</span> lifetraps.</p><p>Abandonment is an exception to this general rule. Researchers who study infants have observed that some babies react far more <span class="rw-note" role="button" tabindex="0" onclick="" data-word="intensely" data-note="in a very strong or extreme way (به‌شدت، به‌طور شدید)" data-note-index="32">intensely</span> to separation than do others. This suggests that some people may be biologically <span class="rw-note" role="button" tabindex="0" onclick="" data-word="predisposed to" data-note="naturally more likely to develop or experience something (مستعدِ، زمینه‌دارِ)" data-note-index="33">predisposed to</span> develop the Abandonment lifetrap.</p><p>The way we respond to separation from a person who takes care of us seems at least <span class="rw-note" role="button" tabindex="0" onclick="" data-word="partly" data-note="to some degree, but not completely (تا حدی، قسمتی)" data-note-index="34">partly</span> <span class="rw-note" role="button" tabindex="0" onclick="" data-word="innate" data-note="existing from birth; not learned (ذاتی، مادرزادی)" data-note-index="35">innate</span>. Separation from the mother is a <span class="rw-note" role="button" tabindex="0" onclick="" data-word="vital issue" data-note="a very important matter or problem (موضوع حیاتی، مسئله مهم)" data-note-index="36">vital issue</span> in a <span class="rw-note" role="button" tabindex="0" onclick="" data-word="newborn" data-note="a baby that has recently been born (نوزاد، نوزاد تازه‌متولدشده)" data-note-index="37">newborn</span>’s life. <span class="rw-note" role="button" tabindex="0" onclick="" data-word="Throughout" data-note="during the whole period or time (در طول، سراسر)" data-note-index="38">Throughout</span> the animal world, infants are totally dependent on their mothers for survival, and if an infant loses its mother, it usually dies. Infants are born prepared to behave in ways designed to end separations from their mothers. They cry and show signs of distress. They „<span class="rw-note" role="button" tabindex="0" onclick="" data-word="protest" data-note="to show strong disagreement with something (اعتراض کردن، مخالفت کردن)" data-note-index="39">protest</span>,“ as John Bowlby called it in his classic book, Separation.</p><p>Bowlby wrote about infants and young children who were <span class="rw-note" role="button" tabindex="0" onclick="" data-word="temporarily" data-note="for a short time, not permanently (موقتاً، به‌طور موقت)" data-note-index="40">temporarily</span> separated from their mothers. The babies were placed in <span class="rw-note" role="button" tabindex="0" onclick="" data-word="nurseries" data-note="places where young children are cared for (مهدکودک‌ها، مراکز نگهداری کودکان)" data-note-index="41">nurseries</span> along with other children. Observation of these children revealed three phases of the separation process, displayed by all the babies.</p><p>BOWLBY’S THREE PHASES OF SEPARATION</p><p>Anxiety</p><p>Despair</p><p>Detachment</p><p>First the babies „protested,“ as we have noted, and exhibited great anxiety. They searched for their mothers. If another person tried to comfort them, they were inconsolable. They showed flashes of anger at their mothers. But as time passed and their mothers did not come, they grew resigned and settled into a period of depression. In this phase they were apathetic and withdrawn. They were indifferent to attempts to connect with them emotionally by the staff. If enough time passed, however, the babies came out of this depression and formed other attachments.</p><p>If the mother then returned, a baby entered the third phase, detachment. The baby was cold to the mother and did not approach or show interest in her. As time passed, however, the baby’s detachment broke, and the baby became attached to the mother once again. This baby was likely to be clingy and anxious when the mother was out of sight—to have what Bowlby calls „anxious attachment“ to the mother.</p><p>Bowlby says this pattern of anxiety, despair, and detachment is universal. It is the response that all young children have to separation from their mothers. Furthermore, the response occurs across the animal kingdom. Not only human infants but infants of all animal species generally display the same pattern. Such universality of behavior strongly suggests a biological predisposition.</p><p>You might recognize the similarity between Bowlby’s separation process and what we have called the cycle of abandonment: anxiety, grief, and anger. Some people, like Lindsay, seem born with the capacity to experience this cycle of emotions to an uncommonly strong degree. When a separation occurs, the anxiety, grief, and anger that they feel are so intense that they are unable to soothe themselves, and they feel totally disconnected and desperate. They can distract themselves from the feeling for only a short time. Without the person there, they cannot make themselves feel calm and secure. Such people are extremely sensitive to losing the ones they love. They connect deeply to other people—this is one of their gifts—but they cannot <span class="rw-note" role="button" tabindex="0" onclick="" data-word="tolerate" data-note="to accept something unpleasant without complaining (تحمل کردن، تاب آوردن)" data-note-index="13">tolerate</span> being alone.</p><p>People who are born with a tendency to respond to separation so <span class="rw-note" role="button" tabindex="0" onclick="" data-word="intensely" data-note="in a very strong or extreme way (به‌شدت، به‌طور شدید)" data-note-index="32">intensely</span> and who are unable to soothe themselves in the absence of a loved person are probably more likely to develop the Abandonment lifetrap. But this does not mean that everyone who has the biological predisposition develops the lifetrap. It depends in part on the early childhood <span class="rw-note" role="button" tabindex="0" onclick="" data-word="environment" data-note="the conditions and surroundings where someone or something lives or exists (محیط، شرایط محیطی)" data-note-index="21">environment</span>.</p><p>If you had stable emotional connections as an infant, particularly to your mother but also to other important people, then even if you are biologically predisposed you may not develop the lifetrap. And certain environments are so unstable or filled with such loss that even if you are not at all predisposed you may develop the lifetrap.</p><p>Nevertheless, it is likely that the more a person has the biological predisposition, the less trauma is needed to activate the lifetrap, and we might look in vain through the past for the reasons that justify its intensity.</p><p>THE ORIGINS OF THE ABANDONMENT LIFETRAP</p><p>You may have a biological predisposition to separation anxiety—difficulty being alone.</p><p>A parent died or left home when you were young.</p><p>Your mother was hospitalized or separated from you for a prolonged period of time when you were a child.</p><p>You were raised by nannies or in an institution by a succession of mother figures, or you were sent away to boarding school at a very young age.</p><p>Your mother was unstable. She became depressed, angry, drunk, or in some other way withdrew from you on a regular basis.</p><p>Your parents divorced when you were young or fought so much that you worried the family would fall apart.</p><p>You lost the attention of a parent in a significant way. For example, a brother or sister was born or your parent remarried.</p><p>Your family was excessively close and you were overprotected.</p><p>You never learned to deal with life’s difficulties as a child.</p><p>Certainly, loss of a parent at an early age is the most dramatic origin of the lifetrap. This was the origin for Abby. Perhaps a parent became ill and had to be away from you for a long time. Perhaps your parents divorced, and one parent moved away and gradually forgot you. Death of a parent, illness, separation, and divorce are all in the same category of important relationships that end in separation. Loss of a parent is particularly <span class="rw-note" role="button" tabindex="0" onclick="" data-word="devastating" data-note="causing great damage or sadness (ویرانگر، بسیار ناراحت‌کننده)" data-note-index="18">devastating</span> in the first years of life. Generally, the earlier the loss, the more vulnerable the child, and the more potent the lifetrap is going to be.</p><p>How deeply the loss of a parent affects you depends upon a number of other factors. Of course, the quality of your other intimate connections is important. Abby, for example, had a loving and stable relationship with her mother that helped sustain her and worked against the strength of her lifetrap. Her lifetrap is circumscribed. She reenacts it only in her romantic relationships with men. If you are able to establish a connection with a substitute for the lost parent, such as with a stepparent, that can help as well. And it can help if the lost parent is restored to you in some way, such as when an ill parent recovers and comes home, or separated parents reunite, or an alcoholic parent becomes sober. Many kinds of experiences can help heal your lifetrap. However, the memory of being abandoned still remains. If you have had a large amount of healing experience, it might require dramatic events to trigger your lifetrap, such as the actual loss of a loved person. If you lost a parent at a young age, you are acutely aware of what it can mean to suffer loss, and the prospect of being <span class="rw-note" role="button" tabindex="0" onclick="" data-word="thrown" data-note="past form of “throw”; moved something through the air with your hand (پرتاب کرد، انداخت)" data-note-index="6">thrown</span> back into that pain is frightening.</p><p>This is the crux of the difference between the Abandonment lifetrap and the Emotional Deprivation lifetrap. With Emotional Deprivation, the parent was always physically there, but the quality of the emotional relationship was consistently inadequate. The parents did not know how to love, nurture, and empathize well enough. The connection with parents was stable, but not close enough. With Abandonment, the connection once existed and it was lost. Or the parent would come and go unpredictably. Unfortunately, for some children, their parents were both emotionally inadequate and unpredictable. In this <span class="rw-note" role="button" tabindex="0" onclick="" data-word="environment" data-note="the conditions and surroundings where someone or something lives or exists (محیط، شرایط محیطی)" data-note-index="21">environment</span>, which is quite common, children will usually develop both the Emotional Deprivation and Abandonment lifetraps.</p><p>Aside from the loss of a parent, another origin for Abandonment is the absence of one person who consistently serves as a maternal figure for the child. Children whose parents have no time for them, who are raised by a succession of nannies or in a succession of day-care centers, or who are raised in institutions where the staff constantly changes are examples of this origin. Particularly during the first years, the child needs the stable presence of one caretaker. The caretaker does not necessarily have to be the parent. However, if there is constant turnover in who serves as that person, it creates disruption. To the child, it can seem like living in a world of strangers.</p><p>The next origin is more subtle. You may have a stable mother figure, but there may be <span class="rw-note" role="button" tabindex="0" onclick="" data-word="instability" data-note="Lack of steadiness or stability (بی‌ثباتی، ناپایداری)" data-note-index="2">instability</span> in the way she relates to you. For example, Patrick’s alcoholic mother could be very loving and connected one moment, and then totally indifferent within a matter of a few hours. And Lindsay’s mother, perhaps reflecting the same biological predisposition as Lindsay herself, was subject to intense mood swings. She was physically there, but the way she related to Lindsay was unpredictable.</p><p>LINDSAY: My mother was there for me, or I should say she was present. Sometimes she was happy and excited and interested in me. Other times she was deep in depression, laying in bed all day and not responding, no matter what I did.</p><p>This origin reflects the moment-to-moment interactions that pass between mother and child. If these interactions are unstable, then the child can develop the Abandonment lifetrap.</p><p>Patrick’s mother was not abusive when she drank. She was indifferent. It is not necessarily abusive parents who give rise to the Abandonment lifetrap. If you have a parent who, because of drug abuse or temper problems, was alternately loving and abusive, you may or may not have developed the Abandonment lifetrap. It depends on whether you experienced the abuse as a loss of emotional connection. To a child who can get little else from a parent, even punishment can be experienced as a connection. Abusive parents can be either connected or withdrawn. This explains why Abuse and Abandonment are not necessarily the same issue.</p><p>There are other childhood situations that foster the development of the Abandonment lifetrap. Perhaps your parents were continually fighting, and you felt the family was unstable and might dissolve. Or perhaps your parents divorced and one or both remarried into families with other children. You may have experienced your parent’s involvement with the new family members as an abandonment. Or perhaps your parent withdrew attention and nurturing from you to give it to a younger sibling. Of course, not all new births in a family are traumatic for the older child. These events do not always create the lifetrap. It depends upon the degree of disconnection. To create the lifetrap, the events must trigger powerful feelings of abandonment.</p><p>Often, a child who feels abandoned by a parent will follow that parent around. The child will shadow the parent, watch the parent, stay near the parent at all times. To an outside observer, it might seem as though the parent and child have a strong connection. In fact, the connection is not strong enough, so the child must always keep the parent in view to make sure the connection is still there. Maintaining the connection with the parent can become the most important thing in the child’s life and can sap the attention the child has for other people in the world.</p><p>Finally, as we noted before, the Abandonment lifetrap can arise from an overprotective <span class="rw-note" role="button" tabindex="0" onclick="" data-word="environment" data-note="the conditions and surroundings where someone or something lives or exists (محیط، شرایط محیطی)" data-note-index="21">environment</span> and become mixed with Dependence. The dependent child fears abandonment. This is what happened to Abby with her mother.</p><p>ABBY: After my father died, my mother didn’t want me to leave her side. She was afraid something would happen to me, that she would lose me, too. I always wanted to be near my mother. I remember I didn’t want to go to school, and I’d rather be home than out playing with friends.</p><p>Abby’s need to be close to her mother undermined her autonomy. She was not free to explore the world and develop confidence in her ability to take care of herself. She stayed dependent on her mother for guidance and direction. In truth, this was probably what her mother wanted as well. Her mother could not face another loss.</p><p>Other children respond to the loss of a parent by becoming more autonomous. Since no one is taking care of them, they learn how to take care of themselves.</p>
+        </div>
+<details class="rw-endnotes"><summary>Notes <span class="rw-endnotes-count">(42)</span></summary><ul class="rw-endnotes-list" id="rw-endnotes-list"><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="0">reverse</button><span class="rw-endnotes-note">reverse — to change to the opposite direction or order (معکوس کردن، برعکس کردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="1">arose</button><span class="rw-endnotes-note">arise — past tense; happened or appeared (به‌وجود آمد، پیش آمد)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="2">instability</button><span class="rw-endnotes-note">Lack of steadiness or stability (بی‌ثباتی، ناپایداری)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="3">function</button><span class="rw-endnotes-note">to work or operate; to do its job (عمل کردن، کار کردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="4">bear</button><span class="rw-endnotes-note">to tolerate something difficult or painful (تحمل کردن، تاب آوردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="5">humanity</button><span class="rw-endnotes-note">all human beings (بشریت، انسانیت)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="6">thrown</button><span class="rw-endnotes-note">past form of “throw”; moved something through the air with your hand (پرتاب کرد، انداخت)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="7">ache</button><span class="rw-endnotes-note">a continuous dull pain (درد، کوفتگی)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="8">soothed</button><span class="rw-endnotes-note">soothe — past tense/past participle; made someone feel calmer or less upset (آرام کرد، تسکین داد)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="9">differs</button><span class="rw-endnotes-note">differ — third-person singular present; be different (متفاوت بودن، فرق داشتن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="10">nurturance</button><span class="rw-endnotes-note">care and support that helps someone grow (مراقبت، پرورش)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="11">lined up</button><span class="rw-endnotes-note">arranged in a line or row (ردیف شده، صف کشیده)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="12">backups</button><span class="rw-endnotes-note">other people kept as possible future romantic partners (گزینه‌های جایگزین، رابطه‌های پشتیبان)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="13">tolerate</button><span class="rw-endnotes-note">to accept something unpleasant without complaining (تحمل کردن، تاب آوردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="14">rarely</button><span class="rw-endnotes-note">not often (به‌ندرت، خیلی کم)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="15">fear</button><span class="rw-endnotes-note">a feeling of being afraid (ترس، هراس)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="16">withdraw</button><span class="rw-endnotes-note">to move away or stop participating (کناره‌گیری کردن، عقب‌نشینی کردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="17">survive</button><span class="rw-endnotes-note">to continue to live or exist (زنده ماندن، دوام آوردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="18">devastating</button><span class="rw-endnotes-note">causing great damage or sadness (ویرانگر، بسیار ناراحت‌کننده)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="19">primarily</button><span class="rw-endnotes-note">mainly; mostly (عمدتاً، در درجه اول)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="20">features</button><span class="rw-endnotes-note">important parts or qualities of something (ویژگی‌ها، خصوصیات)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="21">environment</button><span class="rw-endnotes-note">the conditions and surroundings where someone or something lives or exists (محیط، شرایط محیطی)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="22">neglect</button><span class="rw-endnotes-note">failure to give enough care or attention (غفلت، بی‌توجهی)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="23">alcoholism</button><span class="rw-endnotes-note">a strong dependence on alcohol (اعتیاد به الکل، الکلیسم)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="24">promote</button><span class="rw-endnotes-note">to help something develop or become more successful (ترویج کردن، ارتقا دادن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="25">downplay</button><span class="rw-endnotes-note">to make something seem less important or serious (کم‌اهمیت جلوه دادن، کوچک شمردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="26">contribution</button><span class="rw-endnotes-note">something you give to help achieve a result (مشارکت، سهم)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="27">heredity</button><span class="rw-endnotes-note">the passing of traits from parents to children (وراثت، ارث‌بری)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="28">temperament</button><span class="rw-endnotes-note">a person&#39;s natural way of reacting and behaving (خلق‌وخو، مزاج)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="29">influences</button><span class="rw-endnotes-note">affects how someone or something develops or behaves (تأثیر می‌گذارد، تحت تأثیر قرار می‌دهد)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="30">treatment</button><span class="rw-endnotes-note">the way someone is dealt with or cared for (رفتار، درمان)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="31">specific</button><span class="rw-endnotes-note">clearly defined or particular (مشخص، معین)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="32">intensely</button><span class="rw-endnotes-note">in a very strong or extreme way (به‌شدت، به‌طور شدید)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="33">predisposed to</button><span class="rw-endnotes-note">naturally more likely to develop or experience something (مستعدِ، زمینه‌دارِ)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="34">partly</button><span class="rw-endnotes-note">to some degree, but not completely (تا حدی، قسمتی)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="35">innate</button><span class="rw-endnotes-note">existing from birth; not learned (ذاتی، مادرزادی)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="36">vital issue</button><span class="rw-endnotes-note">a very important matter or problem (موضوع حیاتی، مسئله مهم)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="37">newborn</button><span class="rw-endnotes-note">a baby that has recently been born (نوزاد، نوزاد تازه‌متولدشده)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="38">Throughout</button><span class="rw-endnotes-note">during the whole period or time (در طول، سراسر)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="39">protest</button><span class="rw-endnotes-note">to show strong disagreement with something (اعتراض کردن، مخالفت کردن)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="40">temporarily</button><span class="rw-endnotes-note">for a short time, not permanently (موقتاً، به‌طور موقت)</span></li><li class="rw-endnotes-item"><button type="button" class="rw-endnotes-word" data-note-index="41">nurseries</button><span class="rw-endnotes-note">places where young children are cared for (مهدکودک‌ها، مراکز نگهداری کودکان)</span></li></ul></details>
+      </article>
+    </div>
+  </main>
+
+  <div class="rw-controls" id="rw-controls">
+    <button type="button" class="rw-controls-trigger" id="rw-controls-trigger"
+            aria-label="Text size options" aria-expanded="false">Aa</button>
+    <div class="rw-controls-body">
+      <button type="button" id="rw-fs-down" aria-label="Decrease text size">A&#8722;</button>
+      <button type="button" id="rw-fs-up" aria-label="Increase text size">A+</button>
+    </div>
+  </div>
+
+  <div class="rw-popup" id="rw-popup" role="dialog"
+       aria-labelledby="rw-popup-word" hidden>
+    <button type="button" class="rw-popup-close" id="rw-popup-close" aria-label="Close note">&#215;</button>
+    <p class="rw-popup-word" id="rw-popup-word"></p>
+    <p class="rw-popup-note" id="rw-popup-note"></p>
+  </div>
+</div>
+
+<script>
+
+(function () {
+  "use strict";
+
+  var popup = document.getElementById("rw-popup");
+  if (!popup) return;
+
+  var body = document.getElementById("rw-body");
+  var root = document.documentElement;
+  var popupWord = document.getElementById("rw-popup-word");
+  var popupNote = document.getElementById("rw-popup-note");
+  var popupClose = document.getElementById("rw-popup-close");
+  var btnDown = document.getElementById("rw-fs-down");
+  var btnUp = document.getElementById("rw-fs-up");
+  var controls = document.getElementById("rw-controls");
+  var controlsTrigger = document.getElementById("rw-controls-trigger");
+
+  var KEY = "fs", MIN = 0.9, MAX = 2.4, STEP = 0.1, size = 1;
+
+  function clamp(n) { return Math.round(Math.min(MAX, Math.max(MIN, n)) * 100) / 100; }
+
+  function loadSize() {
+    var v = 1;
+    try {
+      var raw = window.localStorage.getItem(KEY);
+      if (raw !== null) { var n = parseFloat(raw); if (isFinite(n)) v = n; }
+    } catch (e) {}
+    return clamp(v);
+  }
+
+  function applySize(n) {
+    size = clamp(n);
+    root.style.setProperty("--fs-user", String(size));
+    try { window.localStorage.setItem(KEY, String(size)); } catch (e) {}
+    if (btnDown) btnDown.disabled = size <= MIN + 1e-6;
+    if (btnUp) btnUp.disabled = size >= MAX - 1e-6;
+  }
+
+  applySize(loadSize());
+  if (btnDown) btnDown.addEventListener("click", function () { applySize(size - STEP); });
+  if (btnUp) btnUp.addEventListener("click", function () { applySize(size + STEP); });
+
+  if (controls && controlsTrigger) {
+    controlsTrigger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      controls.classList.toggle("is-open");
+      controlsTrigger.setAttribute("aria-expanded",
+        controls.classList.contains("is-open") ? "true" : "false");
+    });
+    document.addEventListener("click", function (e) {
+      if (!controls.contains(e.target)) {
+        controls.classList.remove("is-open");
+        controlsTrigger.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  var trigger = null, openTimer = null;
+
+  function positionPopup(span) {
+    var rect = span.getBoundingClientRect();
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var pw = popup.offsetWidth, ph = popup.offsetHeight;
+    var margin = 16, gap = 12;
+
+    var left = rect.left + rect.width / 2 - pw / 2;
+    left = Math.max(margin, Math.min(vw - pw - margin, left));
+
+    var top;
+    var below = vh - rect.bottom - margin;
+    var above = rect.top - margin;
+
+    if (below >= ph + gap) {
+      top = rect.bottom + gap;
+      popup.setAttribute("data-side", "below");
+    } else if (above >= ph + gap) {
+      top = rect.top - ph - gap;
+      popup.setAttribute("data-side", "above");
+    } else {
+      top = Math.max(margin, Math.min(vh - ph - margin, rect.bottom + gap));
+      popup.setAttribute("data-side", "below");
+    }
+
+    popup.style.left = left + "px";
+    popup.style.top = top + "px";
+  }
+
+  function openPopup(span) {
+    if (openTimer) { window.clearTimeout(openTimer); openTimer = null; }
+    trigger = span;
+    popupWord.textContent = span.getAttribute("data-word") || "";
+    popupNote.textContent = span.getAttribute("data-note") || "";
+
+    var ctx = span.closest("p");
+    var prev = document.querySelector(".rw-ctx");
+    if (prev) prev.classList.remove("rw-ctx");
+    if (ctx) ctx.classList.add("rw-ctx");
+
+    document.body.classList.add("rw-focus");
+    var act = document.querySelectorAll(".rw-note.is-active");
+    for (var i = 0; i < act.length; i++) act[i].classList.remove("is-active");
+    span.classList.add("is-active");
+
+    popup.hidden = false;
+    popup.classList.remove("is-open");
+    popup.style.left = "-9999px";
+    popup.style.top = "0";
+    void popup.offsetWidth;
+    positionPopup(span);
+    void popup.offsetWidth;
+    popup.classList.add("is-open");
+
+    document.addEventListener("keydown", onKey, true);
+    window.addEventListener("scroll", onViewport, { passive: true });
+    window.addEventListener("resize", onViewport, { passive: true });
+
+    try { popupClose.focus({ preventScroll: true }); }
+    catch (e) { popupClose.focus(); }
+  }
+
+  function closePopup() {
+    if (popup.hidden) return;
+    popup.classList.remove("is-open");
+    document.body.classList.remove("rw-focus");
+    var ctx = document.querySelector(".rw-ctx");
+    if (ctx) ctx.classList.remove("rw-ctx");
+    if (trigger) trigger.classList.remove("is-active");
+
+    document.removeEventListener("keydown", onKey, true);
+    window.removeEventListener("scroll", onViewport);
+    window.removeEventListener("resize", onViewport);
+
+    openTimer = window.setTimeout(function () {
+      popup.hidden = true;
+      openTimer = null;
+    }, 220);
+
+    if (trigger) {
+      var t = trigger;
+      trigger = null;
+      try { t.focus({ preventScroll: true }); } catch (e) { t.focus(); }
+    }
+  }
+
+  function onViewport() {
+    if (trigger && popup.classList.contains("is-open")) positionPopup(trigger);
+  }
+
+  function onKey(e) {
+    if (e.key === "Escape" || e.key === "Esc") { e.preventDefault(); closePopup(); }
+  }
+
+  function findNoteSpan(e) {
+    var t = e.target;
+    if (t && t.closest) {
+      var s = t.closest(".rw-note");
+      if (s) return s;
+    }
+    if (typeof e.clientX === "number" && document.elementFromPoint) {
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      if (el && el.closest) {
+        var s2 = el.closest(".rw-note");
+        if (s2) return s2;
+      }
+    }
+    return null;
+  }
+
+  function handleNoteTap(e) {
+    var span = findNoteSpan(e);
+    if (!span) return;
+    if (e.cancelable && typeof e.preventDefault === "function") e.preventDefault();
+    if (trigger === span) { closePopup(); return; }
+    openPopup(span);
+  }
+
+  var lastPointerUpAt = 0;
+  var pointerStart = null;
+
+  body.addEventListener("pointerdown", function (e) {
+    if (e.pointerType !== "touch") return;
+    pointerStart = { x: e.clientX, y: e.clientY };
+  });
+
+  body.addEventListener("pointerup", function (e) {
+    if (e.pointerType !== "touch") return;
+    if (pointerStart) {
+      var dx = e.clientX - pointerStart.x;
+      var dy = e.clientY - pointerStart.y;
+      pointerStart = null;
+      if (dx * dx + dy * dy > 100) return;
+    }
+    lastPointerUpAt = Date.now();
+    handleNoteTap(e);
+  });
+
+  body.addEventListener("click", function (e) {
+    if (Date.now() - lastPointerUpAt < 400) return;
+    handleNoteTap(e);
+  });
+
+  body.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var span = t.closest(".rw-note");
+    if (!span) return;
+    e.preventDefault();
+    openPopup(span);
+  });
+
+  popupClose.addEventListener("click", closePopup);
+
+  var endnotesList = document.getElementById("rw-endnotes-list");
+  if (endnotesList) {
+    endnotesList.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-note-index]");
+      if (!btn) return;
+      var idx = btn.getAttribute("data-note-index");
+      var span = body.querySelector('.rw-note[data-note-index="' + idx + '"]');
+      if (!span) return;
+      span.scrollIntoView({ behavior: "smooth", block: "center" });
+      window.setTimeout(function () { openPopup(span); }, 380);
+    });
+  }
+})();
+
+</script>
+</body>
+</html>
