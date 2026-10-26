@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mistrust and Abuse Questionnaire</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #333333;
+            --border: #dcdcdc;
+            --warning: #d32f2f;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-card h1 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .header-card p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .scale-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .scale-card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 5px;
+        }
+
+        .scale-list {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        
+        .scale-list li {
+            margin-bottom: 5px;
+            display: flex;
+        }
+        
+        .scale-list span {
+            font-weight: bold;
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .question-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: var(--bg);
+            color: var(--text);
+            outline: none;
+            appearance: none;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .result-card {
+            display: none;
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 2px solid var(--primary);
+        }
+
+        .result-card h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .interpretation {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+
+        .warning-msg {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #ffebee;
+            color: var(--warning);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h1>The Mistrust and Abuse Questionnaire</h1>
+        <p>This questionnaire will measure the strength of your Mistrust and Abuse lifetrap.</p>
+    </div>
+
+    <div class="scale-card">
+        <h2>Scoring Key</h2>
+        <ul class="scale-list">
+            <li><span>1.</span> Completely untrue of me</li>
+            <li><span>2.</span> Mostly untrue of me</li>
+            <li><span>3.</span> Slightly more true than untrue of me</li>
+            <li><span>4.</span> Moderately true of me</li>
+            <li><span>5.</span> Mostly true of me</li>
+            <li><span>6.</span> Describes me perfectly</li>
+        </ul>
+    </div>
+
+    <form id="questionnaireForm">
+        <!-- Questions injected via JavaScript below for cleaner code -->
+        <div id="questionsContainer"></div>
+
+        <button type="button" class="btn-submit" onclick="calculateScore()">Calculate My Score</button>
+    </form>
+
+    <div class="result-card" id="resultCard">
+        <h2>Your Total Score</h2>
+        <div class="score-display" id="scoreDisplay">0</div>
+        <div class="interpretation" id="interpretationText"></div>
+        <div class="warning-msg" id="warningMsg">
+            Note: Because you answered 5 or 6 on at least one question, this lifetrap may still apply to you, even if your total score is in the low range.
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        "I expect people to hurt or use me.",
+        "Throughout my life people close to me have abused me.",
+        "It is only a matter of time before the people I love will betray me.",
+        "I have to protect myself and stay on my guard.",
+        "If I am not careful, people will take advantage of me.",
+        "I set up tests for people to see if they are really on my side.",
+        "I try to hurt people before they hurt me.",
+        "I am afraid to let people get close to me because I expect them to hurt me.",
+        "I am angry about what people have done to me.",
+        "I have been physically, verbally, or sexually abused by people I should have been able to trust."
+    ];
+
+    const container = document.getElementById('questionsContainer');
+
+    // Generate Question HTML dynamically
+    questions.forEach((q, index) => {
+        const qNum = index + 1;
+        const html = `
+            <div class="question-card">
+                <div class="question-text">${qNum}. ${q}</div>
+                <select id="q${qNum}" required>
+                    <option value="" disabled selected>Tap to select your score...</option>
+                    <option value="1">1 - Completely untrue of me</option>
+                    <option value="2">2 - Mostly untrue of me</option>
+                    <option value="3">3 - Slightly more true than untrue</option>
+                    <option value="4">4 - Moderately true of me</option>
+                    <option value="5">5 - Mostly true of me</option>
+                    <option value="6">6 - Describes me perfectly</option>
+                </select>
+            </div>
+        `;
+        container.innerHTML += html;
+    });
+
+    function calculateScore() {
+        let total = 0;
+        let hasHighScore = false;
+        let allAnswered = true;
+
+        for (let i = 1; i <= 10; i++) {
+            const selectElement = document.getElementById('q' + i);
+            const val = selectElement.value;
+            
+            if (val === "") {
+                allAnswered = false;
+                selectElement.style.borderColor = "red";
+            } else {
+                selectElement.style.borderColor = "#dcdcdc";
+                const num = parseInt(val);
+                total += num;
+                if (num === 5 || num === 6) {
+                    hasHighScore = true;
+                }
+            }
+        }
+
+        if (!allAnswered) {
+            alert("Please answer all 10 questions before calculating your score.");
+            return;
+        }
+
+        let interpretation = "";
+        if (total >= 10 && total <= 19) {
+            interpretation = "<strong>Very low.</strong> This lifetrap probably does not apply to you.";
+        } else if (total >= 20 && total <= 29) {
+            interpretation = "<strong>Fairly low.</strong> This lifetrap may only apply occasionally.";
+        } else if (total >= 30 && total <= 39) {
+            interpretation = "<strong>Moderate.</strong> This lifetrap is an issue in your life.";
+        } else if (total >= 40 && total <= 49) {
+            interpretation = "<strong>High.</strong> This is definitely an important lifetrap for you.";
+        } else if (total >= 50 && total <= 60) {
+            interpretation = "<strong>Very high.</strong> This is definitely one of your core lifetraps.";
+        }
+
+        document.getElementById('scoreDisplay').innerText = total;
+        document.getElementById('interpretationText').innerHTML = interpretation;
+        document.getElementById('warningMsg').style.display = hasHighScore ? "block" : "none";
+        
+        const resultCard = document.getElementById('resultCard');
+        resultCard.style.display = "block";
+        
+        // Scroll down smoothly to results
+        resultCard.scrollIntoView({ behavior: "smooth" });
+    }
+</script>
+
+</body>
+</html>
